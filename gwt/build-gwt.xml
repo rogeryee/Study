@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<project name="build-gwt" basedir="." default="build-gwt">
+
+	<import file="../build-shared.xml"/>
+  <property name="source.dir" value="source"/>
+  <property name="config.dir" value="config"/>
+  <property name="build.dir" value="build"/>
+  <property name="build.classes.dir" value="${build.dir}/classes"/>
+  <property name="build.client.dir" value="${build.dir}/client"/>
+  <property name="build.config.dir" value="${build.dir}/config"/>
+  <property name="core.build.classes.dir" value="../core/build/classes"/>
+
+  <!-- GWT Properties -->
+  <property name="gwt.compiler" value="com.google.gwt.dev.Compiler"/>
+	
+  <!-- Allowed values are: ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL -->
+  <property name="log.level" value="INFO"/>
+  <!-- Allowed values are: OBFUSCATED, PRETTY, or DETAILED -->
+  <property name="js.style" value="DETAILED"/>
+
+  <!-- Path -->
+  <path id="gwt.classpath">
+  	<path refid="build.classpath"/>
+  	<pathelement location="${source.dir}"/>
+    <pathelement path="${core.build.classes.dir}/"/>
+  </path>
+
+  <!-- GWT Modules with entry points -->	
+	<property name="module.sample"
+            value="com.yeep.gwt.study.sample.rpcSample.RPCSample"/>
+
+  <!-- Build the gwt -->
+  <target name="build-gwt"
+          depends="clean-directory,create-directory,compile,compile-classes,compile-config"/>
+
+  <!-- clean all output files and directories -->
+  <target name="clean-gwt"
+          depends="clean-directory"/>
+
+  <!-- Compile the source code -->
+  <target name="compile">
+
+  	<!--gwt-compile module="com.yeep.gwt.study.sample.helloWorld.HelloWorld"/-->
+  	<gwt-compile module="com.yeep.gwt.study.sample.mvp.hellomvp.HelloMVP"/>
+
+  </target>
+
+  <target name="compile-classes">
+
+    <javac destdir="${build.classes.dir}" target="1.5" debug="true"
+           deprecation="false" optimize="false"
+           failonerror="true">
+      <src path="${source.dir}"/>
+      <classpath refid="gwt.classpath"/>
+    </javac>
+
+  </target>
+
+  <target name="compile-config">
+
+    <copy todir="${build.config.dir}" overwrite="true">
+      <fileset dir="${config.dir}" includes="**/*.xml"/>
+    </copy>
+
+  </target>
+
+
+  <!-- ===================================================================== -->
+  <!--                       GWT compilation macro                           -->
+  <!-- ===================================================================== -->
+  <macrodef name="gwt-compile">
+
+    <attribute name="module"/>
+
+    <sequential>
+    	
+    	<java classpathref="gwt.classpath" failonerror="true"
+    	      classname="${gwt.compiler}" fork="true" newenvironment="true"
+    	      maxmemory="512m" resultproperty="compilation.result.@{module}">
+    	            <arg value="-logLevel"/>
+    	            <arg value="${log.level}"/>
+    	          	<arg value="-compileReport"/>
+    	          	<arg value="-war"/>
+    	            <arg value="${build.client.dir}"/>
+    	            <arg value="-style"/>
+    	            <arg value="${js.style}"/>
+    	            <arg value="@{module}"/>
+    	          </java>
+
+    </sequential>
+
+  </macrodef>
+
+  <!-- Clean build directory and Output diretory-->
+  <target name="clean-directory">
+
+    <delete dir="${build.config.dir}"/>
+    <delete dir="${build.classes.dir}"/>
+    <delete dir="${build.client.dir}"/>
+    <delete dir="${build.dir}"/>
+
+  </target>
+
+  <!-- Create build directory and Output diretory-->
+  <target name="create-directory">
+
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.client.dir}"/>
+    <mkdir dir="${build.classes.dir}"/>
+    <mkdir dir="${build.config.dir}"/>
+
+  </target>
+
+</project>

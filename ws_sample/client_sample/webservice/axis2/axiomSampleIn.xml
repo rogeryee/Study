@@ -1,0 +1,3 @@
+<as:RequestQuery xmlns:as="http://axiomSample.axis2.webservice.study.yeep.com">
+<personName>Roger</personName>
+</as:RequestQuery>

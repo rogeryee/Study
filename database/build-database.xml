@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<project name="build-database" basedir="." default="build-database">
+
+	<import file="../build-shared.xml"/>
+	<property file="database.properties"/>
+  <property name="create.dir" value="create"/>
+	<property name="populate.dir" value="populate"/>
+	
+  <!-- Build the database -->
+  <target name="build-database"
+          depends="db-drop,db-create,db-populate"/>
+
+  <!-- Create Database -->
+  <target name="db-create">
+
+    <sql driver="${jdbc.driverClassName}"
+         url="${jdbc.url}"
+         userid="${jdbc.userName}"
+         password="${jdbc.password}"
+         classpathref="build.classpath">
+
+      <transaction src="${create.dir}/create_table.sql"/>
+
+    </sql>
+
+  </target>
+
+  <!-- Drop all Objects -->
+  <target name="db-drop">
+
+    <sql driver="${jdbc.driverClassName}"
+         url="${jdbc.url}"
+         userid="${jdbc.userName}"
+         password="${jdbc.password}"
+         classpathref="build.classpath">
+
+      <transaction src="${create.dir}/drop_table.sql"/>
+
+    </sql>
+
+  </target>
+	
+	<!-- Populate init data -->
+  <target name="db-populate">
+
+    <sql driver="${jdbc.driverClassName}"
+         url="${jdbc.url}"
+         userid="${jdbc.userName}"
+         password="${jdbc.password}"
+         classpathref="build.classpath">
+
+      <transaction src="${populate.dir}/init_table.sql"/>
+
+    </sql>
+
+  </target>
+
+</project>

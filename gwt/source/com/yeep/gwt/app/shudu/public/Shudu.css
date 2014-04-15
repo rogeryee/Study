@@ -1,0 +1,28 @@
+body {
+  background-color: white;
+  color: black;
+  font-family: Arial, sans-serif;
+  font-size: small;
+  margin: 8px;
+}
+
+.value-fixed
+{
+  background-color: #bfbfbf;
+  font : 10pt verdana, arial, sans-serif;
+  clear: both;
+}
+
+.value-selected
+{
+  background : #ccccee;
+  font : bold 14pt verdana, arial, sans-serif;
+  clear: both;
+}
+
+.value-userinput
+{
+  background-color: white;
+  font : bold 10pt verdana, arial, sans-serif;
+  clear: both;
+}

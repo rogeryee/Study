@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+  <!--**** Hibernate SessionFactory Defination ****-->
+  <bean id="sessionFactory"
+        class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+    <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
+  </bean>
+
+  <!--**** Transaction Manager Defination ****-->
+  <bean id="transactionManager"
+        class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <!--**** DAOs Defination ****-->
+  <bean id="txUserDao" class="com.yeep.study.spring.sample.dao.TestUserInfoDao">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="testUserExtDao"
+        class="com.yeep.study.spring.sample.dao.TestUserExtInfoDao">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="testLogDao" class="com.yeep.study.spring.sample.dao.TestLogDao">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <!--**** Advice Definition ****-->
+  <bean id="beforeAdviceSample"
+        class="com.yeep.study.spring.aopsample.advice.BeforeAdvice"/>
+  <bean id="afterAdviceSample"
+        class="com.yeep.study.spring.aopsample.advice.AfterAdvice"/>
+  <bean id="aroundAdviceSample"
+        class="com.yeep.study.spring.aopsample.advice.AroundAdvice"/>
+  <bean id="afterThrowAdviceSample"
+        class="com.yeep.study.spring.aopsample.advice.AfterThrowAdvice"/>
+
+  <bean id="logAdvice" class="com.yeep.study.spring.sample.aop.LogInfoAdvice"/>
+  <bean id="validationAdvice"
+        class="com.yeep.study.spring.sample.aop.ValidationAdvice"/>
+
+  <bean id="validationAdvisor"
+        class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+    <property name="advice">
+      <ref local="validationAdvice"/>
+    </property>
+    <property name="mappedNames">
+      <list>
+        <value>*</value>
+      </list>
+    </property>
+  </bean>
+
+  <!--**** TransactionProxyFactoryBean Defination ****-->
+  <bean id="baseTransactionProxy"
+        class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"
+        abstract="true">
+    <property name="transactionManager" ref="transactionManager"/>
+    <property name="transactionAttributes">
+      <props>
+        <prop key="save*">PROPAGATION_REQUIRED,-LogicException</prop>
+        <prop key="log*">PROPAGATION_REQUIRED,-LogicException</prop>
+        <!--<prop key="log*">PROPAGATION_REQUIRES_NEW,-LogicException</prop>-->
+        <prop key="load*">PROPAGATION_SUPPORTS,readOnly</prop>
+        <prop key="list*">PROPAGATION_SUPPORTS,readOnly</prop>
+      </props>
+    </property>
+  </bean>
+
+  <!--**** Service Defination ****-->
+  <bean id="advicetarget"
+        class="com.yeep.study.spring.aopsample.service.AdviceServiceImpl"></bean>
+
+  <bean id="adviceSample"
+        class="org.springframework.aop.framework.ProxyFactoryBean">
+    <property name="proxyInterfaces">
+      <value>com.yeep.study.spring.aopsample.service.AdviceService</value>
+    </property>
+    <property name="interceptorNames">
+      <list>
+        <value>beforeAdviceSample</value>
+        <value>afterAdviceSample</value>
+        <value>aroundAdviceSample</value>
+        <value>afterThrowAdviceSample</value>
+      </list>
+    </property>
+    <property name="target">
+      <ref bean="advicetarget"/>
+    </property>
+  </bean>
+
+  <bean id="txUserService" parent="baseTransactionProxy">
+    <property name="proxyInterfaces">
+      <value>com.yeep.study.spring.sample.service.TxUserService</value>
+    </property>
+    <property name="target">
+      <bean class="com.yeep.study.spring.sample.service.TxUserServiceImpl">
+        <property name="userDao" ref="txUserDao"/>
+        <property name="userExtDao" ref="testUserExtDao"/>
+        <property name="logDao" ref="testLogDao"/>
+      </bean>
+    </property>
+    <!-- We can define the special transaction in subclass -->
+    <!--<property name="transactionAttributes">
+        <props>
+            <prop key="save*">PROPAGATION_REQUIRED,-LogicException</prop>
+            ......
+        </props>
+    </property>-->
+    <property name="postInterceptors">
+      <list>
+        <ref local="logAdvice"/>
+        <!-- AfterThrow Advice -->
+        <ref local="validationAdvisor"/>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="spring4GWTService" parent="baseTransactionProxy">
+    <property name="proxyInterfaces">
+      <value>com.yeep.study.gwt.rpcSample.service.Spring4GWTService</value>
+    </property>
+    <property name="target">
+      <bean class="com.yeep.study.gwt.rpcSample.service.Spring4GWTServiceImpl"/>
+    </property>
+  </bean>
+
+  <bean id="shuduService" parent="baseTransactionProxy">
+    <property name="proxyInterfaces">
+      <value>com.yeep.app.shudu.service.ShuduService</value>
+    </property>
+    <property name="target">
+      <bean class="com.yeep.app.shudu.service.ShuduServiceImpl"/>
+    </property>
+  </bean>
+
+  <!-- Import Spring Context files -->
+  <!-- Use classpath <import resource="classpath:com/../../applicationContext-A.xml"/> -->
+  <!-- Use relative path <import resource="applicationContext-A.xml"/> -->
+
+</beans>
+

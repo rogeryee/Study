@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+  <!-- ===================== SPRING DISPATCH HANDLER ======================= -->
+  <!--
+    The URL (example: foo.rpc) below should be defined in a constant named URL in your GWT client
+    service interface (it is the one that extends com.google.gwt.user.client.rpc.RemoteService).
+  -->
+
+  <!-- 
+  <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+    <property name="mappings">
+      <value>
+        /**/sampleRPC.rpc=sampleServiceCtrl
+        /**/shuduRPC.rpc=shuduServiceCtrl
+      </value>
+    </property>
+  </bean>
+   -->
+   
+  <!-- ======================== SPRING CONTROLLERS ========================= -->
+  
+  <!-- sampleServiceCtrl 
+  <bean name="sampleServiceCtrl" class="com.yeep.gwt.util.GWTController">
+      <property name="remoteService">
+          <bean class="com.yeep.gwt.study.sample.rpcSample.server.SampleServiceImpl">
+            <constructor-arg index="0" ref="spring4GWTService"/>
+          </bean>
+      </property>
+  </bean>-->
+
+  <!-- shuduServiceCtrl 
+  <bean name="shuduServiceCtrl" class="com.yeep.gwt.util.GWTController">
+      <property name="remoteService">
+          <bean class="com.yeep.gwt.app.shudu.server.ShuduServiceGWTImpl">
+            <constructor-arg index="0" ref="shuduService"/>
+          </bean>
+      </property>
+  </bean>-->
+
+</beans>
+

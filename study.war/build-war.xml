@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="GBK" ?>
+
+<project name="build-war" basedir="." default="build-war">
+
+	<property file="../build.properties" />
+	
+  <!-- Build the war -->
+  <target name="build-war" depends="clean-directory,create-directory,build-WebConfig"/>
+
+  <!-- clean all output files and directories -->
+  <target name="clean-war" depends="clean-directory"/>
+
+  <!-- Clean build directory and Output diretory-->
+  <target name="clean-directory">
+
+  	<delete dir="${basedir}/WEB-INF/lib"/>
+    <delete dir="${basedir}/WEB-INF/classes"/>
+    <delete dir="${basedir}/gwt"/>
+    <delete file="${basedir}/WEB-INF/gwt-servlet.xml"/>
+  	<delete file="${basedir}/WEB-INF/web.xml"/>
+
+  </target>
+	
+	<target name="build-WebConfig">
+		
+		<xslt basedir="${basedir}/conf" 
+			    destdir="${basedir}/WEB-INF" 
+			    style="${struts-version}.xsl"
+		      force="false">
+			<mapper type="glob" from="web.template.xml" to="web.xml"/>
+		</xslt>
+		
+		<copy todir="${basedir}/WEB-INF/classes" overwrite="true">
+			<fileset dir="${basedir}/conf/${struts-version}"/>
+		</copy>
+		
+	</target>
+
+  <!-- Create build directory and Output diretory-->
+  <target name="create-directory">
+
+  	<mkdir dir="${basedir}/WEB-INF/lib"/>
+    <mkdir dir="${basedir}/WEB-INF/classes"/>
+    <mkdir dir="${basedir}/gwt"/>
+
+  </target>
+
+</project>

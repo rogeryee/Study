@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping
+          PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+          "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.yeep.study.hibernate.model">
+
+  <class name="Address" table="address">
+
+    <id name="id" column="id" type="string" unsaved-value="null">
+        <generator class="uuid.hex"/>
+    </id>
+
+    <property name="name" column="name" type="string" />
+
+    <many-to-one name="user"
+                 class="User"
+                 column="user_id"/>
+
+  </class>
+
+</hibernate-mapping>

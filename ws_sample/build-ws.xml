@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="GBK" ?>
+
+<project name="yeep-ws" basedir="." default="build-ws">
+
+  <property name="source.dir" value="source"/>
+  <property name="lib.dir" value="lib"/>
+  <property name="build.dir" value="build"/>
+  <property name="build.classes.dir" value="${build.dir}/classes"/>
+	<property name="build.aar.dir" value="${build.dir}/aar"/>
+
+  <path id="ws-classpath">
+    <fileset dir="${lib.dir}">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+	
+	<!-- clean all output files and directories -->
+	<target name="clean-ws"
+	        depends="clean-directory"/>
+	
+  <!-- Build the yeep ws -->
+  <target name="build-ws"
+          depends="clean-directory,create-directory,generate-service"/>
+	
+	<!-- Build the aar file -->
+	<target name="generate-service">
+	        
+		<!--aar them up -->
+		<ws-jar module-name="helloWorld"
+		        module-dir="${source.dir}/com/yeep/study/webservice/axis2/helloWorld"/>
+		
+		<ws-jar module-name="axiomSample"
+				    module-dir="${source.dir}/com/yeep/study/webservice/axis2/axiomSample"/>
+
+	</target>
+	
+	<!-- Package WebService -->
+	<macrodef name="ws-jar">
+
+		<attribute name="module-name"/>
+	  <attribute name="module-dir"/>
+		
+		<sequential>
+			
+			<delete includeemptydirs="true">
+				<fileset dir="${build.classes.dir}" includes="**/*"/>
+			</delete>
+			
+			<copy file="@{module-dir}/META-INF/services.xml" 
+						tofile="${build.classes.dir}/META-INF/services.xml" overwrite="true" />
+			
+			<javac destdir="${build.classes.dir}" 
+				     target="1.5" 
+				     debug="true"
+			       deprecation="false" 
+				     optimize="false"
+			       failonerror="true">
+				<src path="@{module-dir}"/>
+			  <classpath refid="ws-classpath"/>
+			</javac>
+					
+			<jar destfile="${build.aar.dir}/@{module-name}.aar"
+					 basedir="${build.classes.dir}"/>
+
+	  </sequential>
+
+	</macrodef>
+
+  <!-- Clean build directory and Output diretory-->
+  <target name="clean-directory">
+
+  	<delete dir="${build.aar.dir}"/>
+  	<delete dir="${build.classes.dir}"/>
+    <delete dir="${build.dir}"/>
+
+  </target>
+
+  <!-- Create build directory and Output diretory-->
+  <target name="create-directory">
+
+    <mkdir dir="${build.dir}"/>
+  	<mkdir dir="${build.aar.dir}"/>
+  	<mkdir dir="${build.classes.dir}"/>
+  	
+  </target>
+
+</project>

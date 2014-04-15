@@ -1,0 +1,10 @@
+<module>
+
+    <inherits name='com.google.gwt.user.User'/>
+
+    <inherits name='com.google.gwt.i18n.I18N'/>
+    <extend-property name="locale" values="zh_CN"/>
+
+    <entry-point class='com.yeep.gwt.study.sample.helloWorld.client.HelloWorld'/>
+
+</module>

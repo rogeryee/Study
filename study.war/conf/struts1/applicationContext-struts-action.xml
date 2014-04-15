@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+  <bean name="/strutsSample"
+        class="com.yeep.study.struts1.action.StrutsSampleAction"/>
+
+  <bean name="/dispatchActionTest"
+        class="com.yeep.study.struts1.action.DispatchActionTestAction"/>
+
+  <bean name="/strutsAjaxSample"
+        class="com.yeep.study.struts1.action.StrutsAjaxSampleAction"/>
+
+  <bean name="/dynaFormTest"
+        class="com.yeep.study.struts1.action.DynaFormTestAction"/>
+
+  <bean name="/dynaValidateFormTest"
+        class="com.yeep.study.struts1.action.DynaValidateFormTestAction"/>
+
+  <bean id="txSampleAction"
+        class="com.yeep.study.spring.sample.action.TxSampleAction">
+    <property name="userService">
+      <ref bean="txUserService"/>
+    </property>
+  </bean>
+
+</beans>
+
+

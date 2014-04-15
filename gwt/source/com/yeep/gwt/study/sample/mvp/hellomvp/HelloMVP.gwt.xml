@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to="helloMVP">
+
+	<inherits name='com.google.gwt.user.User' />
+	<inherits name="com.google.gwt.activity.Activity" />
+	<inherits name="com.google.gwt.place.Place" />
+
+	<entry-point class='com.yeep.gwt.study.sample.mvp.hellomvp.client.HelloMVP' />
+
+	<public path="public" />
+	<source path='client' />
+	<source path='shared' />
+
+	<stylesheet src="HelloMVP.css" />
+
+	<set-property name="user.agent" value="ie8"></set-property>
+	<set-property name="user.agent" value="ie6"></set-property>
+
+</module>

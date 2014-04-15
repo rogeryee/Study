@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app>
+
+	<display-name>Roger's Project</display-name>
+
+  <!-- Spring Configuration -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			classpath*:applicationContext.xml,
+      classpath*:applicationContext-struts-action.xml
+		</param-value>
+	</context-param>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<!-- Struts Configuration -->
+	<struts1>
+	<servlet>
+		<servlet-name>action</servlet-name>
+		<servlet-class>
+			org.apache.struts.action.ActionServlet
+        </servlet-class>
+		<init-param>
+			<param-name>config</param-name>
+			<param-value>
+				/WEB-INF/classes/struts-config.xml
+            </param-value>
+		</init-param>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>action</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+  </struts1>
+  
+  <struts2>
+  <filter>
+  	<filter-name>struts-cleanup</filter-name>
+  	<filter-class>
+   		org.apache.struts2.dispatcher.ActionContextCleanUp
+  	</filter-class>
+  </filter>
+       
+	<filter>
+		<filter-name>struts2</filter-name>
+		<filter-class>
+			org.apache.struts2.dispatcher.FilterDispatcher
+		</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>struts2</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+  </struts2>
+  
+	<!-- GWT Configuration -->
+	<servlet>
+		<servlet-name>gwt</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>gwt</servlet-name>
+		<url-pattern>*.rpc</url-pattern>
+	</servlet-mapping>
+	
+	<!-- DWR Configuration 
+	<servlet>
+		<servlet-name>dwr</servlet-name>
+		<servlet-class>uk.ltd.getahead.dwr.DWRServlet</servlet-class>
+		<init-param>
+			<param-name>debug</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>dwr</servlet-name>
+		<url-pattern>/dwr/*</url-pattern>
+	</servlet-mapping>
+	-->
+
+	<welcome-file-list>
+		<welcome-file>/jsp/index.jsp</welcome-file>
+	</welcome-file-list>
+
+	<!-- Java Standard Tag Library Descriptors -->
+	<jsp-config>
+	<taglib>
+		<taglib-uri>/tags/c</taglib-uri>
+		<taglib-location>/WEB-INF/tags/c.tld</taglib-location>
+	</taglib>
+
+	<taglib>
+		<taglib-uri>/tags/c-rt</taglib-uri>
+		<taglib-location>/WEB-INF/tags/c-rt.tld</taglib-location>
+	</taglib>
+
+	<taglib>
+		<taglib-uri>/tags/fmt</taglib-uri>
+		<taglib-location>/WEB-INF/tags/fmt.tld</taglib-location>
+	</taglib>
+
+	<taglib>
+		<taglib-uri>/tags/fmt-rt</taglib-uri>
+		<taglib-location>/WEB-INF/tags/fmt-rt.tld</taglib-location>
+	</taglib>
+
+	<taglib>
+		<taglib-uri>/tags/x</taglib-uri>
+		<taglib-location>/WEB-INF/tags/x.tld</taglib-location>
+	</taglib>
+
+	<taglib>
+		<taglib-uri>/tags/x-rt</taglib-uri>
+		<taglib-location>/WEB-INF/tags/x-rt.tld</taglib-location>
+	</taglib>
+	</jsp-config>
+	<!-- Struts1 Tag Library Descriptors -->
+	<struts1>
+	<jsp-config>
+	<taglib>
+		<taglib-uri>/tags/struts-bean.tld</taglib-uri>
+		<taglib-location>/WEB-INF/tags/struts-bean.tld</taglib-location>
+	</taglib>
+
+	<taglib>
+		<taglib-uri>/tags/struts-html.tld</taglib-uri>
+		<taglib-location>/WEB-INF/tags/struts-html.tld</taglib-location>
+	</taglib>
+
+	<taglib>
+		<taglib-uri>/tags/struts-logic.tld</taglib-uri>
+		<taglib-location>/WEB-INF/tags/struts-logic.tld</taglib-location>
+	</taglib>
+	</jsp-config>
+  </struts1>
+  
+</web-app>

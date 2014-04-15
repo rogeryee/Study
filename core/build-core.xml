@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<project name="build-core" basedir="." default="build-core">
+
+	<import file="../build-shared.xml" />
+	<property name="source.dir" value="source" />
+	<property name="config.dir" value="config" />
+	<property name="config.hibernate.dir" value="${config.dir}/hibernate" />
+	<property name="build.dir" value="build" />
+	<property name="build.classes.dir" value="${build.dir}/classes" />
+	<property name="build.config.dir" value="${build.dir}/config" />
+	<property name="build.config.hibernate.dir" value="${build.dir}/config/hibernate" />
+	<property name="build.ejb.dir" value="${build.dir}/ejb" />
+	<property name="build.ejb.classes.dir" value="${build.dir}/ejb/classes" />
+	<property name="build.ejb.jar.dir" value="${build.dir}/ejb/jar" />
+
+	<!-- Build the yeep core -->
+	<target name="build-core" depends="clean-directory,create-directory,compile,config" />
+
+	<!-- clean all output files and directories -->
+	<target name="clean-core" depends="clean-directory" />
+
+	<!-- Compile the source code -->
+	<target name="compile">
+
+		<javac destdir="${build.classes.dir}" target="1.5" debug="true" encoding="UTF-8" deprecation="false" optimize="false" failonerror="true">
+			<src path="${source.dir}" />
+			<classpath refid="build.classpath" />
+		</javac>
+
+	</target>
+
+	<!-- Config the xml and properties file -->
+	<target name="config">
+		<copy todir="${build.config.dir}" overwrite="true">
+			<fileset dir="${config.dir}" excludes="/hibernate/**.*" />
+		</copy>
+
+		<copy todir="${build.config.hibernate.dir}" overwrite="true">
+			<fileset dir="${config.dir}/hibernate" includes="**/*.hbm.xml" />
+		</copy>
+	</target>
+
+	<!-- Clean build directory and Output diretory-->
+	<target name="clean-directory">
+		<delete dir="${build.classes.dir}" />
+		<delete dir="${build.config.dir}" />
+		<delete dir="${build.ejb.dir}" />
+		<delete dir="${build.dir}" />
+	</target>
+
+	<!-- Create build directory and Output diretory-->
+	<target name="create-directory">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${build.classes.dir}" />
+		<mkdir dir="${build.ejb.dir}" />
+		<mkdir dir="${build.ejb.classes.dir}" />
+		<mkdir dir="${build.ejb.jar.dir}" />
+		<mkdir dir="${build.config.dir}" />
+		<mkdir dir="${build.config.hibernate.dir}" />
+	</target>
+
+	<!-- Build EJB -->
+	<target name="build-ejb" depends="clean-directory,create-directory">
+		<ejb-compile module-name="helloWorld" module-path="com/yeep/study/ejb3/helloWorld" />
+		<ejb-compile module-name="localSessionBean" module-path="com/yeep/study/ejb3/localSessionBean" />
+		<ejb-compile module-name="localRemoteSessionBean" module-path="com/yeep/study/ejb3/localRemoteSessionBean" />
+	</target>
+
+	<!-- ===================================================================== -->
+	<!--                       EJB compilation macro                           -->
+	<!-- ===================================================================== -->
+	<macrodef name="ejb-compile">
+
+		<attribute name="module-name" />
+		<attribute name="module-path" />
+
+		<sequential>
+
+			<mkdir dir="${build.ejb.classes.dir}/@{module-name}" />
+
+			<javac srcdir="${source.dir}" destdir="${build.ejb.classes.dir}/@{module-name}" target="1.5" debug="true" encoding="UTF-8" deprecation="false" optimize="false" failonerror="true">
+				<include name="@{module-path}/**/*.java" />
+				<classpath refid="build.classpath" />
+			</javac>
+
+			<jar jarfile="${build.ejb.jar.dir}/@{module-name}.jar">
+				<fileset dir="${build.ejb.classes.dir}/@{module-name}" />
+			</jar>
+
+		</sequential>
+
+	</macrodef>
+		
+	<!-- ===================================================================== -->
+	<!--                       Custom Ant Task compilation Task                -->
+	<!-- ===================================================================== -->
+	<property file="${source.dir}\com\yeep\study\ant\files.txt" />
+	<target name="test-custom-ant-task">
+
+		<taskdef name="getfilelist" classname="com.yeep.study.ant.Getfilelist" classpath="yeep.jar">
+			<classpath refid="build.classpath" />
+		</taskdef>
+		<taskdef name="for" classname="net.sf.antcontrib.logic.For" classpath="ant-contrib.jar">
+			<classpath refid="build.classpath" />
+		</taskdef>
+
+		<getfilelist filename="${source.dir}\com\yeep\study\ant\files.txt" property="filelist" />
+		<echo message="${filelist}" />
+
+		<for list="${filelist}" param="file">
+			<sequential>
+
+				<echo message="@{file} = ${@{file}}" />
+
+			</sequential>
+		</for>
+
+	</target>
+
+</project>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config
+    PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN"
+    "http://struts.apache.org/dtds/struts-config_1_2.dtd">
+
+<struts-config>
+
+  <!-- ==================================== Data Source Configuration -->
+
+  <data-sources></data-sources>
+
+
+  <!-- ======================================== Form Bean Definitions -->
+
+  <form-beans>
+
+    <form-bean name="studyForm" type="com.yeep.study.struts1.form.StudyForm"/>
+
+    <form-bean name="dynaForm" type="org.apache.struts.action.DynaActionForm">
+      <form-property name="userName" type="java.lang.String"/>
+      <form-property name="password" type="java.lang.String"/>
+    </form-bean>
+
+    <form-bean name="dynaValidatorForm"
+               type="org.apache.struts.validator.DynaValidatorForm">
+      <form-property name="userName" type="java.lang.String"/>
+      <form-property name="password" type="java.lang.String"/>
+    </form-bean>
+
+  </form-beans>
+
+
+  <!-- ==================================== Action mapping definition -->
+  <action-mappings>
+
+    <action path="/strutsSample"
+            type="org.springframework.web.struts.DelegatingActionProxy"
+            name="studyForm"
+            scope="request"
+            parameter="method">
+      <forward name="dispatchTest" path="/jsp/study/struts/dispatchActionTest.jsp"/>
+      <forward name="ajaxSample" path="/jsp/study/struts/strutsAjaxSample.jsp"/>
+      <forward name="dynaFormTest" path="/jsp/study/struts/dynaActionFormTest.jsp"/>
+      <forward name="dynaValidateFormTest"
+               path="/jsp/study/struts/dynaValidateFormTest.jsp"/>
+    </action>
+
+    <action path="/dispatchActionTest"
+            type="org.springframework.web.struts.DelegatingActionProxy"
+            name="studyForm"
+            scope="request"
+            parameter="method">
+      <forward name="test" path="/jsp/study/struts/dispatchActionTest.jsp"/>
+    </action>
+
+    <action path="/strutsAjaxSample"
+            type="org.springframework.web.struts.DelegatingActionProxy"
+            name="studyForm"
+            scope="request"
+            parameter="method"/>
+
+    <action path="/dynaFormTest"
+            type="org.springframework.web.struts.DelegatingActionProxy"
+            name="dynaForm"
+            scope="request"
+            parameter="method">
+      <forward name="test" path="/jsp/study/struts/dynaActionFormTest.jsp"/>
+    </action>
+
+    <action path="/dynaValidateFormTest"
+            type="org.springframework.web.struts.DelegatingActionProxy"
+            name="dynaValidatorForm"
+            scope="request"
+            parameter="method">
+      <forward name="test" path="/jsp/study/struts/dynaValidateFormTest.jsp"/>
+    </action>
+
+  </action-mappings>
+
+  <!-- ================================ Message Resources Definitions -->
+  <message-resources parameter="applicationResources"/>
+
+  <!-- ========================================== Plug-ins definition -->
+  <plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+    <set-property property="pathnames"
+                  value="/WEB-INF/classes/validator-rules.xml,/WEB-INF/classes/validation.xml"/>
+  </plug-in>
+
+
+</struts-config>

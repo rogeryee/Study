@@ -1,0 +1,9 @@
+<module>
+
+  <inherits name='com.google.gwt.user.User'/>
+
+  <entry-point class='com.yeep.gwt.app.shudu.client.Shudu'/>
+
+  <servlet path="/com.yeep.gwt.app.shudu.Shudu/ShuduServiceGWT"
+           class="com.yeep.gwt.app.shudu.server.ShuduServiceGWTImpl"/>
+</module>

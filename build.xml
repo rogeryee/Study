@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="GBK" ?>
+
+<project name="Study-Root" basedir="." default="build-project">
+
+	<import file="build-shared.xml" />
+	<property file="build.properties" />
+	<property name="database.dir" value="database" />
+	<property name="core.dir" value="core" />
+	<property name="core.build.dir" value="${core.dir}/build" />
+	<property name="gwt.dir" value="gwt" />
+	<property name="gwt.build.dir" value="${gwt.dir}/build" />
+	<property name="war.dir" value="study.war" />
+
+	<!-- Build ， Please run the build-gwt task manually -->
+	<target name="build-project" depends="build-db,build-war,build-core" />
+
+	<!-- Build yeep_war -->
+	<target name="build-war">
+		<ant dir="${war.dir}/" antfile="build-war.xml" target="build-war" inheritall="false" />
+	</target>
+
+	<!-- Build yeep_core -->
+	<target name="build-core">
+		<ant dir="${core.dir}/" antfile="build-core.xml" target="build-core" inheritall="false" />
+
+		<!-- copy the xml/properties/class/jar file to war directory -->
+		<copy todir="${war.dir}/WEB-INF/lib" overwrite="true" flatten="true">
+			<fileset dir="${lib.dir}">
+				<exclude name="**/gwt*.jar"/>
+				<include name="**/*.jar" />
+			</fileset>
+		</copy>
+
+		<copy todir="${war.dir}/WEB-INF/classes" overwrite="true">
+			<fileset dir="${core.build.dir}/classes" />
+		</copy>
+
+		<copy todir="${war.dir}/WEB-INF/classes" overwrite="true">
+			<fileset dir="${core.build.dir}/config" excludes="/hibernate/**.*" />
+		</copy>
+
+		<copy todir="${war.dir}/WEB-INF/classes/hibernate" overwrite="true">
+			<fileset dir="${core.build.dir}/config/hibernate" />
+		</copy>
+	</target>
+
+	<!-- Build yeep_database -->
+	<target name="build-db">
+		<if>
+			<equals arg1="${run-database}" arg2="true" />
+			<then>
+				<echo message="run-database" />
+				<ant dir="${database.dir}/" antfile="build-database.xml" target="build-database" inheritall="false" />
+			</then>
+		</if>
+	</target>
+
+	<!-- Build yeep_gwt -->
+	<target name="build-gwt">
+
+		<ant dir="${gwt.dir}/" antfile="build-gwt.xml" target="build-gwt" inheritall="false" />
+		<copy todir="${war.dir}/gwt" overwrite="true">
+			<fileset dir="${gwt.build.dir}/client" />
+		</copy>
+
+		<copy todir="${war.dir}/WEB-INF/classes" overwrite="true">
+			<fileset dir="${gwt.build.dir}/classes" />
+		</copy>
+
+		<copy todir="${war.dir}/WEB-INF" overwrite="true">
+			<fileset dir="${gwt.build.dir}/config" />
+		</copy>
+	</target>
+
+	<!-- clean all output files and directories -->
+	<target name="clean-project">
+		<ant dir="${core.dir}/" antfile="build-core.xml" target="clean-core" inheritall="false" />
+		<ant dir="${war.dir}/" antfile="build-war.xml" target="clean-war" inheritall="false" />
+		<ant dir="${gwt.dir}/" antfile="build-gwt.xml" target="clean-gwt" inheritall="false" />
+	</target>
+	
+	<target name="build-yeep-ant.jar">
+
+		<jar jarfile="yeep-ant.jar" basedir="classes" includes="**/ant/**.*" excludes="**/ant/files.txt" compress="false"/>
+
+	</target>
+
+</project>

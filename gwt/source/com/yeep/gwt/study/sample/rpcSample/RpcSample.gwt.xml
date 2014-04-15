@@ -1,0 +1,10 @@
+<module>
+
+  <inherits name='com.google.gwt.user.User'/>
+
+  <entry-point class='com.yeep.gwt.study.sample.rpcSample.client.RpcSample'/>
+
+  <servlet path="/sampleRPC.rpc"
+           class="com.yeep.gwt.study.sample.rpcSample.server.SampleServiceImplStub"/>
+
+</module>

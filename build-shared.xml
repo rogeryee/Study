@@ -1,0 +1,25 @@
+<!-- 
+
+	Definition common classpath and common tasks for whole project
+	For each subproject use <import file="../build-shared.xml"/>
+	
+ -->
+<project name="build-shared">
+
+	<!-- Define root path -->
+	<dirname property="build-shared.root" file="${ant.file.build-shared}" />
+	<property name="lib.dir" value="${build-shared.root}/lib" />
+
+	<!-- Define common classpath -->
+	<path id="build.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<!-- Include ant-contrib.jar -->
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+		<classpath refid="build.classpath" />
+	</taskdef>
+	
+</project>

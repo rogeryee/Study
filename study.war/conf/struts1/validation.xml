@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!--
+Form extension
+============
+Form can extend each other (see commons Validator documentation), but please don't do this for SDV fields. (Required fields cannot be extended between dspForm and the others,
+so please don't extend any other fields: it will cause confusion. You just have to duplicate the fields :( )
+
+validWhen rules:
+================
+ A few quick notes on the grammar.
+
+    * All comparisons must be enclosed in parens!
+    * Only two items may be joined with 'and' or 'or'! You can have n items, but you have to split them all up into pairs using parens.
+    * If both items to be compared are convertable to ints, a numeric comparison is done, otherwise a string comparison is done.
+    * You can't have extra parens: RIGHT: (*this* == null)  WRONG: ((*this* == null))
+
+And one more important thing:
+
+    * With validWhen, NEVER use a form in your var-value that is DIFFERENT from your indexedListProperty form.
+
+     In this example, "parcelForm" is in indexedListProperty,
+     but "shipmentForm[]" is in <var-value>: that will cause bad bugs (because of an important extension by KFox that allows us to put Lists into struts forms):
+
+      <field property="etaDate" indexedListProperty="parcelForm" depends="mask,validwhen">
+        <msg name="mask" key="errors.mask.date"/>
+        <arg key="inventory.label.eta" position="0"/>
+        <arg key="inventory.format.date" position="1"/>
+        <var>
+          <var-name>mask</var-name>
+          <var-value>${shortDate}</var-value>
+        </var>
+        <var>
+          <var-name>test</var-name>
+          <var-value>(
+           ( (shipmentForm[].transportTypeId != "3") and (parcelForm[].transportTypeId != "2") )
+            or
+            (*this* != null)
+            )</var-value>
+        </var>
+      </field>
+
+/r:b:
+-->
+<!DOCTYPE form-validation PUBLIC "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1.3//EN"
+  "http://jakarta.apache.org/commons/dtds/validator_1_2_0.dtd">
+
+<form-validation>
+
+    <formset>
+
+        <form name="dynaValidatorForm">
+            <field property="userName"
+                   depends="required">
+                <arg key="dynaValidatorForm.userName"/>
+            </field>
+            <field property="password"
+                   depends="required">
+                <arg key="dynaValidatorForm.password"/>
+            </field>
+        </form>
+    
+  </formset>
+</form-validation>

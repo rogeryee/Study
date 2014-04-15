@@ -1,0 +1,25 @@
+body
+{
+    background-color: white;
+    color: black;
+    font-family: Arial, sans-serif;
+    font-size: small;
+    margin: 8px;
+}
+
+.gwt-HTML { font-size:13 }
+
+.gwt-Button { }
+
+.gwt-Hyperlink { }
+
+.gwt-MenuBar { }
+.gwt-MenuBar .gwt-MenuItem {  }
+.gwt-MenuBar .gwt-MenuItem-selected {  }
+
+.gwt-Label {}
+
+.gwt-CheckBox { }
+
+.gwt-TextArea 
+

@@ -1,0 +1,24 @@
+<!DOCTYPE validators PUBLIC "-//OpenSymphony Group//XWork Validator 1.0.2//EN" "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+<validators>
+	<validator type="regex">
+		<param name="fieldName">password</param>
+		<param name="expression">
+            <![CDATA[(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{8,10})$]]>
+		</param>
+		<message>Password must be between 8 and 10 characters, contain at
+			least one digit and one alphabetic character, and must not contain
+			special characters</message>
+	</validator>
+	<field name="name">
+		<field-validator type="requiredstring">
+			<message>You must enter a name</message>
+		</field-validator>
+	</field>
+	<field name="age">
+		<field-validator type="int">
+			<param name="min">18</param>
+			<param name="max">127</param>
+			<message>Age must be between 18 and 127</message>
+		</field-validator>
+	</field>
+</validators>
